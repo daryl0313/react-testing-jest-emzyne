@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "click-counter",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -26,5 +26,12 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@types/enzyme": "^3.9.1",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.12.1",
+    "jest-enzyme": "^7.0.2"
+  }
 }
