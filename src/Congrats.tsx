@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface ICongratsProps {
-    success?: boolean;
+    success: boolean;
 }
 
 export default (props: ICongratsProps) => {
