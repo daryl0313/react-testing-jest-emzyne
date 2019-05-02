@@ -1,8 +1,8 @@
 import React from 'react';
 
 export interface IGuessedWordsProps {
-    secretWord: string;
-    success: boolean;
+    secretWord?: string;
+    success?: boolean;
     guessedWords: { guessedWord: string, letterMatchCount: number }[]
 }
 
@@ -24,8 +24,8 @@ export function GuessedWords(props: IGuessedWordsProps) {
         contents = (
             <div data-test="guessed-words">
                 <h3>Guessed Words</h3>
-                <table>
-                    <thead>
+                <table className="table table-sm">
+                    <thead className="thead-light">
                         <tr>
                             <th>Guess</th>
                             <th>Matching Letters</th>

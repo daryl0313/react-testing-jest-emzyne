@@ -7,7 +7,7 @@ export interface ICongratsProps {
 export default (props: ICongratsProps) => {
     if (props.success) {
         return (
-            <div data-test="component-test">
+            <div data-test="component-test" className="alert alert-success">
                 <span data-test="congrats-message">
                     Congratulations! You guessed the word!
                 </span>
