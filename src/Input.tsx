@@ -7,9 +7,8 @@ interface IInputProps {
 
 class Input extends Component<IInputProps> {
     render() {
-        const contents = this.props.success
-            ? null
-            : (
+        const contents = !this.props.success
+            && (
                 <form className="form-inline">
                     <input type="text"
                         data-test="input-box"
