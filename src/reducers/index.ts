@@ -1,8 +1,16 @@
 import { combineReducers } from 'redux';
 import success from './successReducer';
-import guessedWords from './guessedWordsReducer';
+import guessedWords, { GuessedWord } from './guessedWordsReducer';
+import secretWord from './secretWordReducer';
 
-export default combineReducers({
+export default combineReducers<State>({
     success,
-    guessedWords
+    guessedWords,
+    secretWord
 });
+
+export interface State {
+    success?: boolean;
+    guessedWords?: GuessedWord[];
+    secretWord?: string | null;
+}
