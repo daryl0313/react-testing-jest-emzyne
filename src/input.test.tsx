@@ -4,7 +4,7 @@ import { shallow, ShallowWrapper } from "enzyme";
 import { findByTestAttr, storeFactory } from "../test/testUtils";
 import Input, { IInputProps } from "./Input";
 
-const setup = (initialState: IInputProps) => {
+const setup = (initialState?: IInputProps) => {
     const store = storeFactory(initialState);
     const wrapper = shallow(<Input store={store} />).dive().dive();
     return wrapper;
@@ -50,6 +50,20 @@ describe('render', () => {
         });
     });
 });
-describe('update state', () => {
+// describe('update state', () => {
 
+// });
+
+describe('render props', () => {
+    test('has success piece of state as prop', ()=>{
+        const success = true;
+        const wrapper = setup({success});
+        const successProp = wrapper.instance().props.success;
+        expect(successProp).toBe(success);
+    });
+    test('"guessWord" action creator is a function prop', () => {
+        const wrapper = setup();
+        const guessWordProp = wrapper.instance().props.guessWord;
+        expect(guessWordProp).toBeInstanceOf(Function);
+    });
 });

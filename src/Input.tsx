@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { guessWord } from "./actions";
 
 export interface IInputProps {
     success: boolean;
@@ -18,7 +19,7 @@ class Input extends Component<IInputProps> {
                     <button type="submit"
                         data-test="submit-button"
                         className="btn btn-primary mb-2">
-                            Submit
+                        Submit
                     </button>
                 </form>
             );
@@ -34,4 +35,4 @@ const mapStateToProps = ({ success }: IInputProps) => {
     return { success };
 }
 
-export default connect(mapStateToProps)(Input);
+export default connect(mapStateToProps, { guessWord })(Input);
