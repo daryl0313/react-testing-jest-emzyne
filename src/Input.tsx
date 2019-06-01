@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { guessWord } from "./actions";
+import { State } from "./reducers";
 
 export interface IInputProps {
     success: boolean;
@@ -31,8 +32,8 @@ class Input extends Component<IInputProps> {
     }
 }
 
-const mapStateToProps = ({ success }: IInputProps) => {
-    return { success };
+const mapStateToProps = ({ success }: State): IInputProps => {
+    return { success: success! };
 }
 
 export default connect(mapStateToProps, { guessWord })(Input);
