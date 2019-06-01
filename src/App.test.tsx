@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import { storeFactory } from "../test/testUtils";
-import App from "./App";
+import App, { UnconnectedApp, IAppProps } from "./App";
 import { State } from './reducers';
 
 const setup = (state?: State) => {
@@ -25,7 +25,7 @@ describe('redux properties', () => {
         expect(successProp).toBe(secretWord);
     });
     test('has access to "guessedWords" state', () => {
-        const guessedWords = [{guessedWord: 'train', letterMatchCount: 3}];
+        const guessedWords = [{ guessedWord: 'train', letterMatchCount: 3 }];
         const wrapper = setup({ guessedWords })
         const guessedWordsProp = wrapper.instance().props.guessedWords;
         expect(guessedWordsProp).toBe(guessedWords);
@@ -35,4 +35,19 @@ describe('redux properties', () => {
         const getSecretWordProp = wrapper.instance().props.getSecretWord;
         expect(getSecretWordProp).toBeInstanceOf(Function);
     });
+});
+
+test('"getSecretWord" runs on App mount', () => {
+    const getSecretWordMock = jest.fn();
+    const props: IAppProps = {
+        getSecretWord: getSecretWordMock,
+        success: false,
+        guessedWords: []
+    }
+    const wrapper = shallow(<UnconnectedApp {...props} />);
+
+    wrapper.instance().componentDidMount!();
+
+    const getSecretWordCallCount = getSecretWordMock.mock.calls.length;
+    expect(getSecretWordCallCount).toBe(1);
 });

@@ -10,11 +10,11 @@ import { GuessedWord } from './reducers/guessedWordsReducer';
 import { Action } from 'redux';
 import Input from './Input';
 
-interface IAppProps {
-  success?: boolean;
-  guessedWords?: GuessedWord[];
+export interface IAppProps {
+  success: boolean;
+  guessedWords: GuessedWord[];
   secretWord?: string | null;
-  getSecretWord: () => (dispatch: Dispatch<Action<ActionTypes>>) => Promise<void>;
+  getSecretWord: () => () => Promise<void>;
 
 }
 
@@ -23,14 +23,18 @@ interface IAppState {
   errorMsg?: string | null
 }
 
-class App extends Component<IAppProps, IAppState> {
+export class UnconnectedApp extends Component<IAppProps, IAppState> {
+  componentDidMount() {
+    this.props.getSecretWord();
+  }
+
   render() {
     return (
       <div className="container">
         <h1>Jotto</h1>
-        <Congrats success={this.props.success!} />
+        <Congrats success={this.props.success} />
         <Input />
-        <GuessedWords guessedWords={this.props.guessedWords!} />
+        <GuessedWords guessedWords={this.props.guessedWords} />
       </div>
     );
   }
@@ -38,7 +42,7 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: State): Pick<IAppProps, 'success' | 'guessedWords' | 'secretWord'> => {
   const { success, guessedWords, secretWord } = state;
-  return { success, guessedWords, secretWord };
+  return { success: success!, guessedWords: guessedWords!, secretWord };
 };
 
-export default connect(mapStateToProps, { getSecretWord })(App);
+export default connect(mapStateToProps, { getSecretWord })(UnconnectedApp);
