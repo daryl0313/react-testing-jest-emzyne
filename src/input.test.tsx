@@ -2,9 +2,9 @@ import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 
 import { findByTestAttr, storeFactory } from "../test/testUtils";
-import Input, { IInputProps } from "./Input";
+import Input, { UnconnectedInput, IInputProps } from "./Input";
 
-const setup = (initialState?: IInputProps) => {
+const setup = (initialState?: Partial<IInputProps>) => {
     const store = storeFactory(initialState);
     const wrapper = shallow(<Input store={store} />).dive().dive();
     return wrapper;
@@ -50,14 +50,11 @@ describe('render', () => {
         });
     });
 });
-// describe('update state', () => {
-
-// });
 
 describe('render props', () => {
-    test('has success piece of state as prop', ()=>{
+    test('has success piece of state as prop', () => {
         const success = true;
-        const wrapper = setup({success});
+        const wrapper = setup({ success });
         const successProp = wrapper.instance().props.success;
         expect(successProp).toBe(success);
     });
@@ -65,5 +62,26 @@ describe('render props', () => {
         const wrapper = setup();
         const guessWordProp = wrapper.instance().props.guessWord;
         expect(guessWordProp).toBeInstanceOf(Function);
+    });
+});
+
+describe('input submit', () => {
+    let guessWordMock: jest.Mock;
+    let wrapper: ShallowWrapper<IInputProps, {}, UnconnectedInput>;
+    const guessedWord = 'train';
+    beforeEach(() => {
+        guessWordMock = jest.fn();
+        wrapper = shallow(<UnconnectedInput success={false} guessWord={guessWordMock} />);
+
+        wrapper.instance().inputBox.current = { value: 'train' };
+
+        findByTestAttr(wrapper, 'submit-button').simulate('click', { preventDefault() { } });
+    });
+    test('should call "guessWord" when button is clicked', () => {
+        expect(guessWordMock.mock.calls.length).toBe(1);
+    });
+    test('calls guessWord with input value as argument', () => {
+        const [guessWordArg] = guessWordMock.mock.calls[0];
+        expect(guessWordArg).toBe(guessedWord);
     });
 });
