@@ -84,4 +84,7 @@ describe('input submit', () => {
         const [guessWordArg] = guessWordMock.mock.calls[0];
         expect(guessWordArg).toBe(guessedWord);
     });
+    test('inputBox clears on submit', () => {
+        expect(wrapper.instance().inputBox.current!.value).toBe('');
+    });
 });
