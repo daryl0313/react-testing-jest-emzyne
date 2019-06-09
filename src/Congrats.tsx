@@ -8,7 +8,7 @@ export default (props: ICongratsProps) => {
     if (props.success) {
         return (
             <div data-testid="component-test" className="alert alert-success">
-                <span data-testid="congrats-message">
+                <span>
                     Congratulations! You guessed the word!
                 </span>
             </div>
