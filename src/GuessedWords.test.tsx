@@ -1,6 +1,7 @@
 import React from 'react';
-import { shallow, ShallowWrapper } from 'enzyme';
-import { findByTestAttr } from '../test/testUtils';
+
+import { render, cleanup, RenderResult } from "@testing-library/react";
+
 import { GuessedWords, IGuessedWordsProps } from './GuessedWords';
 
 const defaultProps: Partial<IGuessedWordsProps> = {
@@ -9,44 +10,47 @@ const defaultProps: Partial<IGuessedWordsProps> = {
 
 const setup = (props: IGuessedWordsProps | {} = {}) => {
     const setupProps = { ...defaultProps, ...props } as IGuessedWordsProps;
-    return shallow(<GuessedWords {...setupProps} />);
+    return render(<GuessedWords {...setupProps} />);
 }
 
+afterEach(cleanup);
+
 describe('if there are no words guessed', () => {
-    let wrapper: ShallowWrapper;
+    let getByTestId: RenderResult['getByTestId'];
     beforeEach(() => {
-        wrapper = setup({ guessedWords: [] });
+        getByTestId = setup({ guessedWords: [] }).getByTestId;
     })
     test('renders without error', () => {
-        const component = findByTestAttr(wrapper, 'component-guessed-word');
-        expect(component.length).toBe(1);
+        const el = getByTestId('component-guessed-word');
+        expect(el).toBeTruthy();
     });
     test('renders instructions to guess a word', () => {
-        const instructions = findByTestAttr(wrapper, 'guess-instructions');
-        expect(instructions.text().length).not.toBe(0);
+        const el = getByTestId('guess-instructions');
+        expect(el.textContent).not.toBeNull();
+        expect(el.textContent!.length).not.toBe(0);
     });
 });
 
 describe('if there are words guessed', () => {
-    let wrapper: ShallowWrapper;
+    let getAllByTestId: RenderResult['getAllByTestId'];
     const guessedWords: IGuessedWordsProps['guessedWords'] = [
         { guessedWord: 'train', letterMatchCount: 3 },
         { guessedWord: 'agile', letterMatchCount: 1 },
         { guessedWord: 'party', letterMatchCount: 5 },
     ]
     beforeEach(() => {
-        wrapper = setup({ guessedWords });
+        getAllByTestId = setup({ guessedWords }).getAllByTestId;
     })
     test('renders without error', () => {
-        const component = findByTestAttr(wrapper, 'component-guessed-word');
-        expect(component.length).toBe(1);
+        const els = getAllByTestId('component-guessed-word');
+        expect(els.length).toBe(1);
     });
     test('renders "guessed words" section', () => {
-        const guessedWordsNode = findByTestAttr(wrapper, 'guessed-words');
-        expect(guessedWordsNode.length).toBe(1);
+        const els = getAllByTestId('guessed-words');
+        expect(els.length).toBe(1);
     });
     test('correct number of guessed words', () => {
-        const guessedWordsNodes = findByTestAttr(wrapper, 'guessed-word');
-        expect(guessedWordsNodes.length).toBe(guessedWords.length);
+        const els = getAllByTestId('guessed-word');
+        expect(els.length).toBe(guessedWords.length);
     });
 });
