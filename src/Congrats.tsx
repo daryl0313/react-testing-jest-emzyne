@@ -7,14 +7,14 @@ export interface ICongratsProps {
 export default (props: ICongratsProps) => {
     if (props.success) {
         return (
-            <div data-test="component-test" className="alert alert-success">
-                <span data-test="congrats-message">
+            <div data-testid="component-test" className="alert alert-success">
+                <span data-testid="congrats-message">
                     Congratulations! You guessed the word!
                 </span>
             </div>
         );
     }
     return (
-        <div data-test="component-congrats" />
+        <div data-testid="component-congrats" />
     );
 }
