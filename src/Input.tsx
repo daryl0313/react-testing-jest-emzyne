@@ -26,20 +26,20 @@ export class UnconnectedInput extends Component<IInputProps> {
                 <form className="form-inline">
                     <input type="text"
                         ref={this.inputBox}
-                        data-test="input-box"
+                        data-testid="input-box"
                         className="mb-2 mx-sm-3"
                         id="word-guess"
                         placeholder="enter guess" />
                     <button type="submit"
                         onClick={this.submitGuessedWord}
-                        data-test="submit-button"
+                        data-testid="submit-button"
                         className="btn btn-primary mb-2">
                         Submit
                     </button>
                 </form>
             );
         return (
-            <div data-test="component-input">
+            <div data-testid="component-input">
                 {contents}
             </div>
         )
