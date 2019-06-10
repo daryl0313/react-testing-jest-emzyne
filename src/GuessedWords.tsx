@@ -10,9 +10,9 @@ export function GuessedWords(props: IGuessedWordsProps) {
     let contents: JSX.Element;
     if (props.guessedWords.length === 0) {
         contents = (
-            <span data-testid="guess-instructions">
+            <>
                 Try to guess the secret word!
-            </span>
+            </>
         );
     } else {
         const guessedwordsRows = props.guessedWords.map((word, index) => (
