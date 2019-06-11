@@ -1,13 +1,12 @@
-import React, { Component, Dispatch } from 'react';
+import React, { Component } from 'react';
 import './App.css';
 
 import Congrats from './Congrats';
 import { GuessedWords } from './GuessedWords';
 import { connect } from 'react-redux';
 import { State } from './reducers';
-import { getSecretWord, ActionTypes } from "./actions";
+import { getSecretWord } from "./actions";
 import { GuessedWord } from './reducers/guessedWordsReducer';
-import { Action } from 'redux';
 import Input from './Input';
 
 export interface IAppProps {
