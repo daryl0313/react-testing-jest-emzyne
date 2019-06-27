@@ -46,8 +46,8 @@ export class UnconnectedInput extends Component<IInputProps> {
     }
 }
 
-const mapStateToProps = ({ success }: State): Pick<IInputProps, 'success'> => {
-    return { success: success! };
+const mapStateToProps = ({ success }: State): IInputProps => {
+    return { success: success! } as IInputProps;
 }
 
 export default connect(mapStateToProps, { guessWord })(UnconnectedInput);

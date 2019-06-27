@@ -3,10 +3,11 @@ import { render, RenderResult, cleanup, fireEvent, getByText } from "@testing-li
 
 import { storeFactory } from "../test/testUtils";
 import Input, { UnconnectedInput, IInputProps } from "./Input";
+import { Provider } from "react-redux";
 
 const setup = (initialState?: Partial<IInputProps>): RenderResult => {
     const store = storeFactory(initialState);
-    return render(<Input store={store} />);
+    return render(<Provider store={store}><Input /></Provider>);
 }
 
 afterEach(cleanup);

@@ -39,9 +39,9 @@ export class UnconnectedApp extends Component<IAppProps, IAppState> {
   }
 }
 
-const mapStateToProps = (state: State): Pick<IAppProps, 'success' | 'guessedWords' | 'secretWord'> => {
+const mapStateToProps = (state: State): IAppProps => {
   const { success, guessedWords, secretWord } = state;
-  return { success: success!, guessedWords: guessedWords!, secretWord };
+  return { success: success!, guessedWords: guessedWords!, secretWord } as IAppProps;
 };
 
 export default connect(mapStateToProps, { getSecretWord })(UnconnectedApp);
