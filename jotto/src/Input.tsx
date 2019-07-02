@@ -8,7 +8,7 @@ export interface IInputProps {
     guessWord: (guessedWord: string) => Promise<void>;
 }
 
-export class UnconnectedInput extends Component<IInputProps> {
+class UnconnectedInput extends Component<IInputProps> {
     public inputBox = React.createRef<HTMLInputElement>();
 
     submitGuessedWord = (e: React.MouseEvent) => {
@@ -21,8 +21,9 @@ export class UnconnectedInput extends Component<IInputProps> {
     }
 
     render() {
-        const contents = !this.props.success
-            && (
+        let contents: JSX.Element | undefined;
+        if (!this.props.success) {
+            contents = (
                 <form className="form-inline">
                     <input type="text"
                         ref={this.inputBox}
@@ -38,6 +39,7 @@ export class UnconnectedInput extends Component<IInputProps> {
                     </button>
                 </form>
             );
+        }
         return (
             <div data-testid="component-input">
                 {contents}

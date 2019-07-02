@@ -1,13 +1,13 @@
 import React from "react";
-import { render, RenderResult, cleanup, fireEvent, getByText } from "@testing-library/react";
+import { render, RenderResult, cleanup, fireEvent } from "@testing-library/react";
 
-import { storeFactory } from "../test/testUtils";
-import Input, { UnconnectedInput, IInputProps } from "./Input";
-import { Provider } from "react-redux";
+import Input, { IInputProps } from "./Input";
 
-const setup = (initialState?: Partial<IInputProps>): RenderResult => {
-    const store = storeFactory(initialState);
-    return render(<Provider store={store}><Input /></Provider>);
+jest.mock('react-redux', () => ({ connect: () => (UnconnectedComponent: any) => UnconnectedComponent }));
+
+const setup = (initialState: Partial<IInputProps> = {}): RenderResult => {
+    const UnconnectedInput: React.ComponentClass<IInputProps> = Input as any;
+    return render(<UnconnectedInput guessWord={initialState.guessWord!} success={initialState.success!} />);
 }
 
 afterEach(cleanup);
@@ -18,17 +18,13 @@ describe('render', () => {
         beforeEach(() => {
             initialState = { success: false };
         });
-        test('renders component without error', () => {
-            const { getByTestId } = setup(initialState);
-            getByTestId('component-input');
-        });
         test('renders input box', () => {
-            const { getByTestId } = setup(initialState);
-            getByTestId('input-box');
+            const { getByPlaceholderText } = setup(initialState);
+            expect(getByPlaceholderText('enter guess')).not.toBeNull();
         });
         test('renders submit button', () => {
-            const { getByTestId } = setup(initialState);
-            getByTestId('submit-button');
+            const { getByText } = setup(initialState);
+            expect(getByText('Submit')).not.toBeNull();
         });
     });
     describe('word has been guessed', () => {
@@ -36,19 +32,13 @@ describe('render', () => {
         beforeEach(() => {
             initialState = { success: true };
         });
-        xtest('renders component without error', () => {
-            const { getByTestId } = setup(initialState);
-            getByTestId('component-input');
-        });
         test('does not render input box', () => {
-            const { queryByTestId } = setup(initialState);
-            const el = queryByTestId('input-box');
-            expect(el).toBeFalsy();
+            const { queryByPlaceholderText } = setup(initialState);
+            expect(queryByPlaceholderText('enter guess')).toBeNull();
         });
         test('does not render submit button', () => {
-            const { queryByTestId } = setup(initialState);
-            const el = queryByTestId('submit-button');
-            expect(el).toBeFalsy();
+            const { queryByText } = setup(initialState);
+            expect(queryByText('Submit')).toBeNull();
         });
     });
 });
@@ -73,7 +63,7 @@ describe('input submit', () => {
     let inputBox: HTMLInputElement;
     beforeEach(() => {
         guessWordMock = jest.fn();
-        const { getByPlaceholderText, getByText } = render(<UnconnectedInput success={false} guessWord={guessWordMock} />);
+        const { getByPlaceholderText, getByText } = setup({ success: false, guessWord: guessWordMock });
 
         inputBox = getByPlaceholderText('enter guess') as HTMLInputElement;
         inputBox.value = guessedWord;
@@ -81,7 +71,7 @@ describe('input submit', () => {
         fireEvent.click(getByText('Submit'));
     });
     test('should call "guessWord" when button is clicked', () => {
-        expect(guessWordMock.mock.calls.length).toBe(1);
+        expect(guessWordMock).toHaveBeenCalled();
     });
     test('calls guessWord with input value as argument', () => {
         const [guessWordArg] = guessWordMock.mock.calls[0];
