@@ -15,20 +15,18 @@ const setup = (props: IGuessedWordsProps | {} = {}) => {
 
 afterEach(cleanup);
 
+const expectedInitialInstructions = 'Try to guess the secret word!';
+const expectedGuessedWordsTableTitle = 'Guessed Words';
+
 describe('if there are no words guessed', () => {
-    let getByTestId: RenderResult['getByTestId'];
-    let getByText: RenderResult['getByText'];
-    beforeEach(() => {
-        const renderResult = setup({ guessedWords: [] });
-        getByTestId = renderResult.getByTestId;
-        getByText = renderResult.getByText;
-    })
-    test('renders without error', () => {
-        getByTestId('component-guessed-word');
-    });
     test('renders instructions to guess a word', () => {
-        getByText('Try to guess the secret word!');
+        const { getByText } = setup({ guessedWords: [] });
+        expect(getByText(expectedInitialInstructions)).not.toBeNull();
     });
+    test('does not render "guessed words" section', () => {
+        const { queryByText } = setup({ guessedWords: [] });
+        expect(queryByText(expectedGuessedWordsTableTitle)).toBeNull();
+    })
 });
 
 describe('if there are words guessed', () => {
@@ -37,17 +35,21 @@ describe('if there are words guessed', () => {
         { guessedWord: 'agile', letterMatchCount: 1 },
         { guessedWord: 'party', letterMatchCount: 5 },
     ]
-    test('renders without error', () => {
-        const { getByTestId } = setup({ guessedWords });
-        getByTestId('component-guessed-word');
-    });
     test('renders "guessed words" section', () => {
-        const { getByTestId } = setup({ guessedWords });
-        getByTestId('guessed-words');
+        const { getByText } = setup({ guessedWords });
+        expect(getByText(expectedGuessedWordsTableTitle)).not.toBeNull();
+    });
+    test('does not render instructions to guess a word', () => {
+        const { queryByText } = setup({ guessedWords });
+        expect(queryByText(expectedInitialInstructions)).toBeNull();
     });
     test('correct number of guessed words', () => {
         const { getAllByTestId } = setup({ guessedWords });
         const els = getAllByTestId('guessed-word');
         expect(els.length).toBe(guessedWords.length);
+    });
+    test('displays `guessedWord` for each guessed word object', () => {
+        const { getByText } = setup({ guessedWords });
+        guessedWords.forEach(gw => { getByText(gw.guessedWord) });
     });
 });
