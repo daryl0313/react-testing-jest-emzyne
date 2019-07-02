@@ -1,25 +1,22 @@
 import React from 'react';
 import { render, RenderResult, wait } from "@testing-library/react";
 
-import { storeFactory } from "../test/testUtils";
-import App, { UnconnectedApp, IAppProps } from "./App";
+import App, { IAppProps } from "./App";
 import { State } from './reducers';
-import { Provider } from 'react-redux';
 import { getSecretWord } from './actions';
 
-const setup = (state: Pick<State, 'success' | 'guessedWords'>, getSecretWord: () => () => Promise<void>) => {
-    const store = storeFactory(state || {});
-    return render(<Provider store={store}><UnconnectedApp success={state.success!} guessedWords={state.guessedWords!} getSecretWord={getSecretWord} /></Provider>);
+jest.mock('react-redux', () => ({ connect: () => (UnconnectedApp: any) => UnconnectedApp }));
+
+const setup = (props: Pick<State, 'success' | 'guessedWords'>, gsw: typeof getSecretWord) => {
+    const UnconnectedApp: React.ComponentClass<IAppProps> = App as any;
+    return render(<UnconnectedApp success={props.success!} guessedWords={props.guessedWords!} getSecretWord={gsw} />)
 }
 
 test('"getSecretWord" runs on App mount', async () => {
-    const getSecretWordMock = jest.fn();
-    const props = {
-        success: false,
-        guessedWords: []
-    }
+    const getSecretWordMock = jest.fn().mockReturnValue('test value');
+    const props = { success: false, guessedWords: [] };
+
     setup(props, getSecretWordMock);
 
-    const getSecretWordCallCount = getSecretWordMock.mock.calls.length;
-    expect(getSecretWordCallCount).toBe(1);
+    expect(getSecretWordMock).toHaveBeenCalled();
 });

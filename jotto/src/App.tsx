@@ -13,16 +13,13 @@ export interface IAppProps {
   success: boolean;
   guessedWords: GuessedWord[];
   secretWord?: string | null;
-  getSecretWord: () => () => Promise<void>;
-
+  getSecretWord: typeof getSecretWord;
 }
 
 interface IAppState {
-  counter: number,
-  errorMsg?: string | null
 }
 
-export class UnconnectedApp extends Component<IAppProps, IAppState> {
+class UnconnectedApp extends Component<IAppProps, IAppState> {
   componentDidMount() {
     this.props.getSecretWord();
   }
