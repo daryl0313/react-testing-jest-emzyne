@@ -13,16 +13,13 @@ const setup = (props?: ICongratsProps) => {
 
 afterEach(cleanup);
 
-test('renders without error', () => {
-    const { getByTestId } = setup();
-    getByTestId('component-congrats');
-});
+const expectedSuccessMessage = 'Congratulations! You guessed the word!';
+
 test('renders no text when "success" prop is false', () => {
-    const { getByTestId } = setup({ success: false });
-    const component = getByTestId('component-congrats');
-    expect(component.textContent).toBe('');
+    const { queryByText } = setup({ success: false });
+    expect(queryByText(expectedSuccessMessage)).toBeNull();
 });
 test('renders congrats message when "success" prop is true', () => {
     const { getByText } = setup({ success: true });
-    getByText('Congratulations! You guessed the word!');
+    expect(getByText(expectedSuccessMessage)).toBeTruthy();
 });
